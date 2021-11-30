@@ -1,18 +1,25 @@
 const todoModel = require("../../db/models/todos");
-const createTodo = (req, res) => {
-  const { name } = req.body;
-  const newTodo = new todoModel({
+const userModel = require("../../db/models/user");
+const createTodo = async (req, res) => {
+ try{
+  const { name,email, password } = req.body;
+  const todo = new todoModel({
     name,
   });
-  newTodo
-    .save()
-    .then((result) => {
-      res.status("201").json(result);
-    })
-    .catch((err) => {
-      res.status("404").json(err);
-    });
+  const user = new userModel({
+    email,
+    password,
+  });
+  todo.owner=user._id
+  user.todo.push(todo)
+  await user.save();
+  await todo.save();
+  res.status(200).json("done")
+ }catch(err){
+  res.status(200).json(err)
+ }
 };
+
 const getTodos = (req, res) => {
   todoModel
     .find({})

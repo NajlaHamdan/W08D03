@@ -8,6 +8,12 @@ const user = new mongoose.Schema({
     unique: true,
   },
   password: {type:String,required:true},
+  todo: [
+    {
+      type:{type: mongoose.Schema.Types.ObjectId,
+      ref:"todos"},
+    },
+  ],
 });
 
 module.exports = mongoose.model("user", user);

@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const salt = Number(process.env.SALT);
 const secret = process.env.SECRETKEY;
+
 const register = async (req, res) => {
 
   const { email, password, role } = req.body;
