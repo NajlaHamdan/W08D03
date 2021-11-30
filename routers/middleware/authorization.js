@@ -6,7 +6,7 @@ const authorization = async(req, res, next) => {
     if(result.role==="admin"){
         next();
     }else{
-
+      res.status("404").json(err);
     }
   } catch (err) {
     res.status("404").json(err);
