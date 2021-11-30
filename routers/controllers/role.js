@@ -15,7 +15,7 @@ const createRole = (req, res) => {
     });
 };
 const getRole = (req, res) => {
-    roleModel
+  roleModel
     .find({})
     .then((result) => res.status("200").json(result))
     .catch((err) => res.status("200").json(err));
