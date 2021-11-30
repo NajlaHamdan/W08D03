@@ -6,7 +6,6 @@ const salt = Number(process.env.SALT);
 const secret = process.env.SECRETKEY;
 
 const register = async (req, res) => {
-
   const { email, password, role } = req.body;
   const hashed = await bcrypt.hash(password, salt)
   const newUser = new userModel({
@@ -23,6 +22,8 @@ const register = async (req, res) => {
       res.status("404").json(err);
     });
 };
+
+
 const login = (req, res) => {
   const { email, password } = req.body;
   userModel
