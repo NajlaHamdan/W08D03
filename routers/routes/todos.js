@@ -20,5 +20,5 @@ routerTodo.get("/getTodoById/:id/:todoId", authentication, getTodoById);
 routerTodo.post("/updateById", authentication, updateById);
 routerTodo.get("/getAllTodos", authentication, authorization, getAllTodos);
 routerTodo.delete("/deleteTodos", authentication, authorization, deleteTodos);
-routerTodo.delete("/deleteTodosSingleUser/:id", deleteTodosSingleUser);
+routerTodo.delete("/deleteTodosSingleUser/:id",authentication, deleteTodosSingleUser);
 module.exports = routerTodo;
