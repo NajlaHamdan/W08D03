@@ -74,7 +74,7 @@ const getTodoById = (req, res) => {
           } else {
             res.status("404").json("there is no todo with this id");
           }
-        }else{
+        } else {
           res.status("404").json("there is no user with this id");
         }
       })
@@ -90,27 +90,27 @@ const updateById = async (req, res) => {
   try {
     const { name, id, todoId } = req.body;
     //find user
-    await userModel.findById(id).then(async(result)=>{
-      if(result){
-       const todo= await todoModel.findByIdAndUpdate(todoId,{name:name})//.then(async (result) => {
-          if(todo){
-            console.log(todo);
-            await todo.save()
-            res.status("200").json(todo);
-          }else{
-            res.status("404").json("there is no todo with this id");
-          }
+    await userModel.findById(id).then(async (result) => {
+      if (result) {
+        const todo = await todoModel.findByIdAndUpdate(todoId, { name: name }); //.then(async (result) => {
+        if (todo) {
+          console.log(todo);
+          await todo.save();
+          res.status("200").json(todo);
+        } else {
+          res.status("404").json("there is no todo with this id");
+        }
         //});
-      }else{
+      } else {
         res.status("404").json("there is no user with this id");
       }
-    })
+    });
   } catch (err) {
     res.status("404").json(err);
   }
 };
 
-const getAllTodos = async(req, res) => {
+const getAllTodos = async (req, res) => {
   try {
     //find user to get his todos
     // userModel
@@ -119,29 +119,29 @@ const getAllTodos = async(req, res) => {
     //     if (result) {
     //       console.log(result);
     //       // find todos for the user and save it in array todos
-          const todos = await todoModel.find();
-          if (todos.length) {
-            //store todos name in array to display it in res
-             const todosName = [];
-            todos.forEach((item) => {
-               todosName.push(item.name);
-             });
-            res.status("200").json(todosName);
-          } else {
-            res.status("404").json("no todos");
-          }
-      //   } else {
-      //     res.status("404").json("no user with this id");
-      //   }
-      // })
-      // .catch((err) => {
-      //   res.status("200").json(result);
-      // });
+    const todos = await todoModel.find();
+    if (todos.length) {
+      //store todos name in array to display it in res
+      const todosName = [];
+      todos.forEach((item) => {
+        todosName.push(item.name);
+      });
+      res.status("200").json(todosName);
+    } else {
+      res.status("404").json("no todos");
+    }
+    //   } else {
+    //     res.status("404").json("no user with this id");
+    //   }
+    // })
+    // .catch((err) => {
+    //   res.status("200").json(result);
+    // });
   } catch (err) {
     res.status("404").json(err);
   }
 };
-const deleteTodos = async(req, res) => {
+const deleteTodos = async (req, res) => {
   try {
     //find user to get his todos
     // userModel
@@ -149,60 +149,59 @@ const deleteTodos = async(req, res) => {
     //   .then(async (result) => {
     //     if (result) {
     //       console.log(result);
-          // find todos for the user and save it in array todos
-          const todos = await todoModel.remove({});
-          if (todos.length==0) {
-            //store todos name in array to display it in res
-            //  const todosName = [];
-            // todos.forEach((item) => {
-            //    todosName.push(item.name);
-            //  });
-            res.status("200").json(todos);
-          }
-          //  else {
-          //   res.status("404").json("no todos");
-          // }
-      //   } else {
-      //     res.status("404").json("no user with this id");
-      //   }
-      // })
-      // .catch((err) => {
-      //   res.status("200").json(result);
-      // });
+    // find todos for the user and save it in array todos
+    const todos = await todoModel.remove({});
+    if (todos.length == 0) {
+      //store todos name in array to display it in res
+      //  const todosName = [];
+      // todos.forEach((item) => {
+      //    todosName.push(item.name);
+      //  });
+      res.status("200").json(todos);
+    }
+    //  else {
+    //   res.status("404").json("no todos");
+    // }
+    //   } else {
+    //     res.status("404").json("no user with this id");
+    //   }
+    // })
+    // .catch((err) => {
+    //   res.status("200").json(result);
+    // });
   } catch (err) {
     res.status("404").json(err);
   }
 };
-const deleteTodosSingleUser = async(req, res) => {
+const deleteTodosSingleUser = async (req, res) => {
   try {
+    const { name, id, todoId } = req.params;
     //find user to get his todos
-    userModel
-      .findById(id)
-      .then(async (result) => {
-        if (result) {
-          console.log(result);
-          // find todos for the user and save it in array todos
-          const todos = await todoModel.remove({});
-          if (todos.length==0) {
-            //store todos name in array to display it in res
-            //  const todosName = [];
-            // todos.forEach((item) => {
-            //    todosName.push(item.name);
-            //  });
-            res.status("200").json(todos);
+    await userModel.findById(id).then(async (result) => {
+      if (result) {
+        console.log(result);
+        // find todos for the user and save it in array todos
+        await todoModel.remove({}).then((result) => {
+          if (result.deletedCount != 0) {
+            res.status("200").json(result);
+          } else {
+            res.status("404").json("already deleted");
           }
-          //  else {
-          //   res.status("404").json("no todos");
-          // }
-        } else {
-          res.status("404").json("no user with this id");
-        }
-      })
-      // .catch((err) => {
-      //   res.status("200").json(result);
-      // });
+        });
+      } else {
+        res.status("404").json("no user with this id");
+      }
+    });
   } catch (err) {
     res.status("404").json(err);
   }
 };
-module.exports = { createTodo, getTodos, getTodoById, updateById ,getAllTodos,deleteTodos,deleteTodosSingleUser};
+module.exports = {
+  createTodo,
+  getTodos,
+  getTodoById,
+  updateById,
+  getAllTodos,
+  deleteTodos,
+  deleteTodosSingleUser,
+};
