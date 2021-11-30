@@ -32,15 +32,15 @@ const getTodos = (req, res) => {
     //find user to get his todos
     userModel
       .findById(id)
-      .then(async(result) => {
+      .then(async (result) => {
         if (result) {
           console.log(result);
           // find todos for the user and save it in array todos
-          const todos =await todoModel.find({ owner: id });
+          const todos = await todoModel.find({ owner: id });
           if (todos.length) {
             //store todos name in array to display it in res
-            const todosName=[]
-            todos.forEach(item=>{
+            const todosName = [];
+            todos.forEach((item) => {
               todosName.push(item.name);
             });
             res.status("200").json(todosName);
@@ -71,7 +71,11 @@ const getTodoById = (req, res) => {
           if (todo) {
             console.log(todo);
             res.status("200").json(todo.name);
+          } else {
+            res.status("404").json("there is no todo with this id");
           }
+        }else{
+          res.status("404").json("there is no user with this id");
         }
       })
       .catch((err) => {
@@ -81,4 +85,28 @@ const getTodoById = (req, res) => {
     res.status("404").json(err);
   }
 };
-module.exports = { createTodo, getTodos, getTodoById };
+
+const updateById = async (req, res) => {
+  try {
+    const { name, id, todoId } = req.body;
+    //find user
+    await userModel.findById(id).then(async(result)=>{
+      if(result){
+       const todo= await todoModel.findByIdAndUpdate(todoId,{name:name})//.then(async (result) => {
+          if(todo){
+            console.log(todo);
+            await todo.save()
+            res.status("200").json(todo);
+          }else{
+            res.status("404").json("there is no todo with this id");
+          }
+        //});
+      }else{
+        res.status("404").json("there is no user with this id");
+      }
+    })
+  } catch (err) {
+    res.status("404").json(err);
+  }
+};
+module.exports = { createTodo, getTodos, getTodoById, updateById };
