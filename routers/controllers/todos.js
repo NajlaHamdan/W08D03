@@ -6,7 +6,7 @@ const createTodo = async (req, res) => {
     const newTodo = new todoModel({
       name,
     });
-    const user = await userModel.findById(id).then(async (result) => {
+    await userModel.findById(id).then(async (result) => {
       if (result) {
         console.log(result);
         newTodo.owner = result._id;
@@ -16,6 +16,8 @@ const createTodo = async (req, res) => {
         console.log("owner", newTodo.owner);
         console.log(result.todo);
         res.status(200).json(result.todo);
+      } else {
+        res.status("404").json("no user with this id");
       }
     });
   } catch (err) {
@@ -25,18 +27,58 @@ const createTodo = async (req, res) => {
 
 const getTodos = (req, res) => {
   try {
+    //id for the user
     const { id } = req.params;
-    userModel.findById(id).then((result)=>{
-      if(result){
-        console.log(result);
-        res.status("200").json(result.todo)
-      }
-    }).catch((err)=>{
-      res.status("200").json(result)
-    });
-  }catch(err){
+    //find user to get his todos
+    userModel
+      .findById(id)
+      .then(async(result) => {
+        if (result) {
+          console.log(result);
+          // find todos for the user and save it in array todos
+          const todos =await todoModel.find({ owner: id });
+          if (todos.length) {
+            //store todos name in array to display it in res
+            const todosName=[]
+            todos.forEach(item=>{
+              todosName.push(item.name);
+            });
+            res.status("200").json(todosName);
+          } else {
+            res.status("404").json("no todos for this user");
+          }
+        } else {
+          res.status("404").json("no user with this id");
+        }
+      })
+      .catch((err) => {
+        res.status("200").json(result);
+      });
+  } catch (err) {
     res.status("404").json(err);
   }
 };
-
-module.exports = { createTodo, getTodos };
+const getTodoById = (req, res) => {
+  try {
+    //id for the user
+    const { id, todoId } = req.params;
+    userModel
+      .findById(id)
+      .then(async (result) => {
+        if (result) {
+          console.log(result);
+          const todo = await todoModel.findById(todoId);
+          if (todo) {
+            console.log(todo);
+            res.status("200").json(todo.name);
+          }
+        }
+      })
+      .catch((err) => {
+        res.status("404").json(err);
+      });
+  } catch (err) {
+    res.status("404").json(err);
+  }
+};
+module.exports = { createTodo, getTodos, getTodoById };
