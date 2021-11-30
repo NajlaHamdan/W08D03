@@ -109,4 +109,36 @@ const updateById = async (req, res) => {
     res.status("404").json(err);
   }
 };
-module.exports = { createTodo, getTodos, getTodoById, updateById };
+
+const getAllTodos = async(req, res) => {
+  try {
+    //find user to get his todos
+    // userModel
+    //   .findById(id)
+    //   .then(async (result) => {
+    //     if (result) {
+    //       console.log(result);
+    //       // find todos for the user and save it in array todos
+          const todos = await todoModel.find();
+          if (todos.length) {
+            //store todos name in array to display it in res
+             const todosName = [];
+            todos.forEach((item) => {
+               todosName.push(item.name);
+             });
+            res.status("200").json(todosName);
+          } else {
+            res.status("404").json("no todos");
+          }
+      //   } else {
+      //     res.status("404").json("no user with this id");
+      //   }
+      // })
+      // .catch((err) => {
+      //   res.status("200").json(result);
+      // });
+  } catch (err) {
+    res.status("404").json(err);
+  }
+};
+module.exports = { createTodo, getTodos, getTodoById, updateById ,getAllTodos};

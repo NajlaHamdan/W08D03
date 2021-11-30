@@ -1,10 +1,20 @@
-const express=require("express");
-const routerTodo=express.Router();
+const express = require("express");
+const routerTodo = express.Router();
 
-const {createTodo,getTodos,getTodoById,updateById}=require("../controllers/todos")
+const {
+  createTodo,
+  getTodos,
+  getTodoById,
+  updateById,
+  getAllTodos,
+} = require("../controllers/todos");
 
-routerTodo.post("/createTodo",createTodo);
-routerTodo.get("/getTodo/:id",getTodos);
-routerTodo.get("/getTodoById/:id/:todoId",getTodoById);
-routerTodo.post("/updateById",updateById);
-module.exports=routerTodo;
+const authentication = require("./../middleware/authentication");
+const authorization = require("./../middleware/authorization");
+
+routerTodo.post("/createTodo", authentication, createTodo);
+routerTodo.get("/getTodo/:id", authentication, getTodos);
+routerTodo.get("/getTodoById/:id/:todoId", authentication, getTodoById);
+routerTodo.post("/updateById", authentication, updateById);
+routerTodo.get("/getAllTodos", authentication, authorization, getAllTodos);
+module.exports = routerTodo;

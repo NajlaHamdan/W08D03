@@ -1,10 +1,13 @@
-const express=require("express");
-const routerUser=express.Router();
+const express = require("express");
+const routerUser = express.Router();
 
-const {register,login}=require("./../controllers/user")
+const { register, login, getAllUsers,removeAllUsers } = require("./../controllers/user");
 
-routerUser.post("/createUser",register);
-routerUser.post("/login",login);
+const authentication = require("./../middleware/authentication");
+const authorization = require("./../middleware/authorization");
 
-
-module.exports=routerUser;
+routerUser.post("/createUser", register);
+routerUser.post("/login", login);
+routerUser.get("/getAllUsers", authentication, authorization, getAllUsers);
+routerUser.delete("/removeAllUsers", authentication, authorization, removeAllUsers);
+module.exports = routerUser;
