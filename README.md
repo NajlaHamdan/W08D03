@@ -1,4 +1,9 @@
-# W08D03
+# package used 
+- express
+- dotenv
+- jsonwebtoken 
+- bcrypt
+- mongoose
 # CRUD -operations
 user can do to his/her todo list the following functions
 ### Create task
