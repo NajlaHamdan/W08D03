@@ -1,5 +1,6 @@
 const todoModel = require("../../db/models/todos");
 const userModel = require("../../db/models/user");
+
 const createTodo = async (req, res) => {
   try {
     const { name, id } = req.body;
@@ -39,20 +40,20 @@ const getTodos = (req, res) => {
           const todos = await todoModel.find({ owner: id });
           if (todos.length) {
             //store todos name in array to display it in res
-            const todosName = [];
-            todos.forEach((item) => {
-              todosName.push(item.name);
-            });
-            res.status("200").json(todosName);
+            // const todosName = [];
+            // todos.forEach((item) => {
+            //   todosName.push(item.name);
+            // });
+            res.status(200).json(todos);
           } else {
-            res.status("404").json("no todos for this user");
+            res.status(200).json("no todos for this user");
           }
         } else {
           res.status("404").json("no user with this id");
         }
       })
       .catch((err) => {
-        res.status("200").json(result);
+        res.status("200").json(err);
       });
   } catch (err) {
     res.status("404").json(err);
@@ -96,9 +97,9 @@ const updateById = async (req, res) => {
         if (todo) {
           console.log(todo);
           await todo.save();
-          res.status("200").json(todo);
+          res.status(200).json(todo);
         } else {
-          res.status("404").json("there is no todo with this id");
+          res.status(200).json("there is no todo with this id");
         }
         //});
       } else {
@@ -136,6 +137,32 @@ const deleteTodosSingleUser = async (req, res) => {
     res.status("404").json(err);
   }
 };
+const deleteTodo = async (req, res) => {
+  try {
+    const { id, todoId } = req.params;
+    await userModel.findById(id).then(async (result) => {
+      if (result) {
+        await todoModel.find({ owner: id }).then(async (result) => {
+          if (result.length) {
+            await todoModel.findByIdAndDelete({ _id:todoId }).then((result) => {
+              if (result) {
+                res.status("200").json(result);
+              } else {
+                res.status("404").json("already deleted");
+              }
+            });
+          } else {
+            res.status("404").json("this user does not have todos");
+          }
+        });
+      } else {
+        res.status("404").json("no user with this id");
+      }
+    });
+  } catch (err) {
+    res.status("404").json(err);
+  }
+};
 //for admin
 const getAllTodos = async (req, res) => {
   try {
@@ -154,6 +181,7 @@ const getAllTodos = async (req, res) => {
     res.status("404").json(err);
   }
 };
+//remove all todos for one user
 const deleteTodos = async (req, res) => {
   try {
     await todoModel.deleteMany({ owner: id }).then((result) => {
@@ -173,6 +201,7 @@ module.exports = {
   getTodoById,
   updateById,
   getAllTodos,
+  deleteTodo,
   deleteTodos,
   deleteTodosSingleUser,
 };

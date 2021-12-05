@@ -5,7 +5,7 @@ const { createRole, getRole } = require("./../controllers/role");
 const authentication = require("./../middleware/authentication");
 const authorization = require("./../middleware/authorization");
 
-routerRole.post("/createRole", authentication, authorization, createRole);
+routerRole.post("/createRole", createRole);
 routerRole.get("/getRole", authentication, authorization, getRole);
 
 module.exports = routerRole;

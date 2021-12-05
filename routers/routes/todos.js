@@ -7,6 +7,7 @@ const {
   getTodoById,
   updateById,
   getAllTodos,
+  deleteTodo,
   deleteTodos,
   deleteTodosSingleUser,
 } = require("../controllers/todos");
@@ -14,14 +15,17 @@ const {
 const authentication = require("./../middleware/authentication");
 const authorization = require("./../middleware/authorization");
 
-routerTodo.post("/createTodo", authentication, createTodo);
-routerTodo.get("/getTodo/:id", authentication, getTodos);
+routerTodo.post("/createTodo", createTodo);
+routerTodo.get("/getTodo/:id", getTodos);
 routerTodo.get("/getTodoById/:id/:todoId", authentication, getTodoById);
-routerTodo.post("/updateById", authentication, updateById);
+routerTodo.post("/updateById", updateById);
 routerTodo.delete(
   "/deleteTodosSingleUser/:id",
-  authentication,
   deleteTodosSingleUser
+);
+routerTodo.delete(
+  "/deleteTodo/:id/:todoId",
+  deleteTodo
 );
 //for admin
 routerTodo.get("/getAllTodos", authentication, authorization, getAllTodos);

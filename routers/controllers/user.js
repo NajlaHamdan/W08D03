@@ -16,10 +16,10 @@ const register = async (req, res) => {
   newUser
     .save()
     .then((result) => {
-      res.status("201").json(result);
+      res.status(201).json(result);
     })
     .catch((err) => {
-      res.status("404").json(err);
+      res.status(404).json(err);
     });
 };
 
