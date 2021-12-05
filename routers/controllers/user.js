@@ -31,7 +31,6 @@ const login = (req, res) => {
     .then(async (result) => {
       if (result) {
         if (result.email == email) {
-          // console.log("hhhi");
           const payload = {
             role: result.role,
           };
@@ -41,11 +40,9 @@ const login = (req, res) => {
           const token = await jwt.sign(payload, secret, options);
           console.log(token);
           const decrybtedPass = await bcrypt.compare(password, result.password);
-          // console.log(decrybtedPass);
-
           if (decrybtedPass) {
             // console.log("hhhi");
-            res.status(200).json(result);
+            res.status(200).json({result,token});
           } else {
             console.log("hi");
             res.status("404").json("email or password is not valid");
