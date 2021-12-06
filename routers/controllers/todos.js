@@ -173,7 +173,7 @@ const getAllTodos = async (req, res) => {
       todos.forEach((item) => {
         todosName.push(item.name);
       });
-      res.status("200").json(todosName);
+      res.status("200").json(todos);
     } else {
       res.status("404").json("no todos");
     }
@@ -181,10 +181,23 @@ const getAllTodos = async (req, res) => {
     res.status("404").json(err);
   }
 };
-//remove all todos for one user
+//remove all todos 
 const deleteTodos = async (req, res) => {
-  try {
-    await todoModel.deleteMany({ owner: id }).then((result) => {
+  try {//owner:id for one user
+    await todoModel.deleteMany({  }).then((result) => {
+      if (result.deletedCount != 0) {
+        res.status("200").json(result);
+      } else {
+        res.status("404").json("already deleted");
+      }
+    });
+  } catch (err) {
+    res.status("404").json(err);
+  }
+};
+const deleteUsers = async (req, res) => {
+  try {//owner:id for one user
+    await userModel.deleteMany({  }).then((result) => {
       if (result.deletedCount != 0) {
         res.status("200").json(result);
       } else {
@@ -203,5 +216,6 @@ module.exports = {
   getAllTodos,
   deleteTodo,
   deleteTodos,
+  deleteUsers,
   deleteTodosSingleUser,
 };
