@@ -7,7 +7,7 @@ const authentication = (req, res, next) => {
       return res.status("403").json("forbidden");
     }
     const tocken = req.headers.authorization.split(" ")[1];
-    const parsed = jwt.verify.findById(tocken, secret);
+    const parsed = jwt.verify(tocken, secret);
     req.tocken=parsed;
     next();
   } catch (err) {
