@@ -9,6 +9,7 @@ const authentication = (req, res, next) => {
     const tocken = req.headers.authorization.split(" ")[1];
     const parsed = jwt.verify(tocken, secret);
     req.tocken=parsed;
+    console.log(parsed,"parsed");
     next();
   } catch (err) {
     res.status("404").json(err);

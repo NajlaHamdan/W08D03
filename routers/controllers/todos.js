@@ -195,6 +195,20 @@ const deleteTodos = async (req, res) => {
     res.status("404").json(err);
   }
 };
+const deleteTodoByAdmin = async (req, res) => {
+  try {//owner:id for one user
+    const {id}=req.body
+    await todoModel.findByIdAndDelete(id).then((result) => {
+      if (result) {
+        res.status("200").json(result);
+      } else {
+        res.status(404).json("already deleted");
+      }
+    });
+  } catch (err) {
+    res.status(404).json(err);
+  }
+};
 const deleteUsers = async (req, res) => {
   try {//owner:id for one user
     await userModel.deleteMany({  }).then((result) => {
@@ -217,5 +231,6 @@ module.exports = {
   deleteTodo,
   deleteTodos,
   deleteUsers,
+  deleteTodoByAdmin,
   deleteTodosSingleUser,
 };

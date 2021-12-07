@@ -10,6 +10,7 @@ const {
   deleteTodo,
   deleteTodos,
   deleteUsers,
+  deleteTodoByAdmin,
   deleteTodosSingleUser,
 } = require("../controllers/todos");
 
@@ -33,5 +34,5 @@ routerTodo.delete(
 routerTodo.get("/getAllTodos", authentication,authorization, getAllTodos);
 routerTodo.delete("/deleteTodos", authentication,authorization,deleteTodos);
 routerTodo.delete("/deleteUsers", authentication,authorization, deleteUsers);
-
+routerTodo.delete("/deleteTodoByAdmin", authentication,authorization, deleteTodoByAdmin);
 module.exports = routerTodo;
