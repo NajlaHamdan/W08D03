@@ -15,5 +15,5 @@ the user can update specific task .
 ### Delete task
 the user can update specific task .
 
-**Note: we use Json web tocken to generate tocken if the user logged in.**
+**Note: we use Json web tocken to generate tocken if the user logged in.**<br />
 **Note: we use bcrybt to hash password if the user registerd **
